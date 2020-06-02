@@ -1,0 +1,51 @@
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: true
+
+log:
+  level: WARN
+accessLog:
+  filePath: /logs/traefik.log
+  bufferingSize: 100
+
+api: 
+  dashboard: true
+
+entryPoints:
+  http:
+    address: ":80"
+  https:
+    address: ":443"
+
+    
+
+
+providers:
+  file:
+    directory: /rules
+    watch: true
+  docker: 
+    exposedByDefault: false
+    swarmMode: true
+
+certificatesResolvers:
+  acmeResolver:
+      acme:    
+        email: "nissy34@gmail.com"
+        storage: "/letsEncrypt/acme.json"
+  
+        # caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+        # tlsChallenge: {}
+          
+        # Use a HTTP-01 ACME challenge.
+        #
+        # Optional
+        #
+        httpChallenge:
+          entryPoint: http
+  
+        # dnsChallenge:
+        #   provider: duckdns
+        #   resolvers:
+        #   - "1.0.0.1:53"
+        #   - "8.8.8.8:53"

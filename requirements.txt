@@ -5,3 +5,4 @@ PyJWT==1.4.2
 Flask-Bcrypt==0.7.1
 flask-request-validator==2.1.2
 email-validator==1.1.1
+PyYAML==5.1.2

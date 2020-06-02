@@ -2,7 +2,7 @@ from flask import request, render_template, make_response
 from flask import current_app as app
 from flask_request_validator.exceptions import InvalidRequest
 import logging
-logger = logging.getLogger()
+logger = logging.getLogger("app")
 
 from werkzeug.exceptions import InternalServerError
 
@@ -24,11 +24,11 @@ def page_not_found(error):
 
 @app.errorhandler(InvalidRequest)
 def input_wrong(e):
-    logger.error('input vialation', exc_info=1)
+    logger.error('input vialation')
     return {
         'statusCode': 422,
         'message': 'Invalid request data',
-        'details': e.errors
+        'errors': e.errors
     }
 
 @app.errorhandler(Exception)

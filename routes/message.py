@@ -1,14 +1,39 @@
-from flask import request, render_template, make_response
-from datetime import datetime as dt
+from flask import request
 from flask import current_app as app
+from flask_request_validator import (
+    PATH,
+    FORM,
+    JSON,
+    Param,
+    validate_params
+)
+
+from validators.validator_rules import (
+    Pattern,
+    MinLength,
+    MaxLength
+)
+
 from DB.models.message import Message, db
 from DB.models.user import User
 from DB.models.messageReceiver import MessageReceiver
+
 from auth.decorators import token_auth
+
 
 @app.route('/users/<username>/message', methods=['POST'])
 @token_auth
-def message_create(username):
+@validate_params(
+    Param('username', PATH, str, required=True, rules=[
+          MinLength(1, error='Invalid length. can`t be empty')]),
+    Param('receiver', JSON, str, required=True, rules=[
+          MinLength(1, error='Invalid length. can`t be empty')]),
+    Param('subject', JSON, str, required=True, rules=[MaxLength(120, error='Invalid length. Max length = 120'),
+                                                      MinLength(1, error='Invalid length. Min length = 1')]),
+    Param('message', JSON, str, required=True, rules=[MaxLength(120, error='Invalid length. Max length = 120'),
+                                                      MinLength(1, error='Invalid length. Min length = 1')])
+)
+def message_create(username, receiver, subject, message):
     content = request.get_json()
     sender = User.query.filter_by(username=username).first()
 
@@ -28,10 +53,8 @@ def message_create(username):
 
     subject = content["subject"]
     message = content["message"]
-    creation_date = content["creation_date"]
 
-    message = Message(subject=subject, message=message,
-                      creation_date=creation_date)
+    message = Message(subject=subject, message=message)
 
     sender.sentMessagas.append(message)
     receiver.receivedMessages.append(MessageReceiver(message=message))
@@ -47,6 +70,10 @@ def message_create(username):
 
 @app.route('/users/<username>/messages', methods=['GET'])
 @token_auth
+@validate_params(
+    Param('username', PATH, str, required=True, rules=[
+          MinLength(1, error='Invalid length. can`t be empty')]),
+)
 def message_get(username):
     receiver = User.query.filter_by(username=username).first()
     unread_only = request.args.get('unread', None, lambda x: x == "true")
@@ -79,13 +106,20 @@ def message_get(username):
 
 @app.route('/users/<username>/messages/<message_id>', methods=['PATCH'])
 @token_auth
-def message_read(username, message_id):
+@validate_params(
+    Param('username', PATH, str, required=True, rules=[MinLength(1, error='Invalid length. can`t be empty')]),
+    Param('message_id', PATH, str, required=True, rules=[MinLength(1, error='Invalid length. can`t be empty')]),
+    Param('read', JSON, bool, required=True)
+)
+def message_read(username, message_id, read):
     receiver = User.query.filter_by(username=username).first()
+
     if receiver is None:
         return {
             'statusCode': 404,
             'message': 'User dosn\'t exist'
         }, 404
+
     message = MessageReceiver.query.with_parent(receiver)\
         .filter_by(message_id=message_id)\
         .first()
@@ -95,10 +129,10 @@ def message_read(username, message_id):
             'message': 'Message dosn\'t exist'
         }, 404
 
-    message.read = True
+    message.read = read
     db.session.add(message)
     db.session.commit()
-    
+
     return {
         'statusCode': 200,
         'message': 'OK',
@@ -116,6 +150,10 @@ def message_read(username, message_id):
 
 @app.route('/users/<username>/messages/<message_id>', methods=['DELETE'])
 @token_auth
+@validate_params(
+    Param('username', PATH, str, required=True, rules=[MinLength(1, error='Invalid length. can`t be empty')]),
+    Param('message_id', PATH, str, required=True, rules=[MinLength(1, error='Invalid length. can`t be empty')]),
+)
 def message_delete(username, message_id):
 
     user = User.query.filter_by(username=username).first()
@@ -125,7 +163,8 @@ def message_delete(username, message_id):
 
     # receiver
     if message is None:
-        message = MessageReceiver.query.with_parent(user).filter_by(message_id=message_id).first()
+        message = MessageReceiver.query.with_parent(
+            user).filter_by(message_id=message_id).first()
 
     if message is not None:
         db.session.delete(message)

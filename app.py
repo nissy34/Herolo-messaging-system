@@ -13,14 +13,20 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
     app.config['BCRYPT_LOG_ROUNDS'] = BCRYPT_LOG_ROUNDS
 
+
+
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
+    
     connect_db_to_app(app)
 
     with app.app_context():
-            import routes.message
-            import routes.error
-            import routes.user
-            bootstrap()
-            return app
+        import routes.message
+        import routes.error
+        import routes.user
+        bootstrap()
+        return app
 
 
 app = create_app()
