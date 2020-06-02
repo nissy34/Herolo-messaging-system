@@ -11,7 +11,14 @@ The service can be reached at https://herolo.duckdns.org
  - **RDS** - A MySQL instance on AWS to presist the data  
 
 # Deployment
-The components are packeged as docker containers and Deployed on EC2 in AWS
+The app is deployed in AWS on a EC2 instance with Docker engine installed.
+the instance is configured as a swarm with a single manager node in order to enable to scale the app.
+
+stack details:
+ - The messaging REST API App scaled to 4 instances [link to App image at Docker hub](https://hub.docker.com/r/nissy34/herolo)
+ - Traefik as a revearse proxy and automatic ssl certs [link to the image at Docker hub](https://hub.docker.com/_/traefik) 
+	 - [Link to traefik dashboard](https://admin:adminadmin@traefik.herolo.duckdns.org/) (user: admin, password: adminadmin)
+
 
 ![Deployment](https://raw.githubusercontent.com/nissy34/Herolo-messaging-system/master/github/Deployment.png)
 
