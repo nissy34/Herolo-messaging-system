@@ -5,6 +5,7 @@ from flask_request_validator import (
     PATH,
     FORM,
     JSON,
+    GET,
     Param,
     validate_params
 )
@@ -15,7 +16,7 @@ from validators.validator_rules import (
     MaxLength
 )
 
-# TODO use a service instead of interacting straight with the models  
+# TODO use a service instead of interacting straight with the models
 from DB.models.message import Message, db
 from DB.models.user import User
 from DB.models.messageReceiver import MessageReceiver
@@ -23,6 +24,7 @@ from DB.models.messageReceiver import MessageReceiver
 from auth.decorators import token_auth
 
 logger = logging.getLogger('rest')
+
 
 @app.route('/users/<username>/message', methods=['POST'])
 @token_auth
@@ -46,9 +48,9 @@ def message_create(username, receiver, subject, message):
             'message': 'Sender dosn\'t exist'
         }, 400
 
-    receiver = User.query.filter_by(username=content["receiver"]).first()
+    receiver = User.query.filter_by(username=receiver).first()
 
-    # we only allow to send to existing receivers 
+    # we only allow to send to existing receivers
     if receiver is None:
         return {
             'statusCode': 400,
@@ -74,27 +76,30 @@ def message_create(username, receiver, subject, message):
         'result': message.id
     }, 201
 
-
+# TODO add pagination
 @app.route('/users/<username>/messages', methods=['GET'])
 @token_auth
 @validate_params(
-    Param('username', PATH, str, required=True, rules=[
-          MinLength(1, error='Invalid length. can`t be empty')]),
+    Param('username', PATH, str, required=True, rules=[MinLength(1, error='Invalid length. can`t be empty')]),
+    Param('unread', GET, bool, required=False)
 )
-def message_get(username):
+def message_get(username, unread=None):
     receiver = User.query.filter_by(username=username).first()
-    unread_only = request.args.get('unread', None, lambda x: x == "true")
+
     if receiver is None:
         return {
             'statusCode': 404,
             'message': 'User dosn\'t exist'
         }, 404
+
     query = MessageReceiver.query.with_parent(receiver)\
         .options(db.joinedload("message").joinedload("sender"))
 
-    if unread_only is not None:
-        query = query.filter_by(read=not unread_only)
+    if unread is not None:
+        query = query.filter_by(read=not unread)
+
     messages = query.paginate()
+
     return {
         'statusCode': 200,
         'message': 'OK',
@@ -114,8 +119,10 @@ def message_get(username):
 @app.route('/users/<username>/messages/<message_id>', methods=['PATCH'])
 @token_auth
 @validate_params(
-    Param('username', PATH, str, required=True, rules=[MinLength(1, error='Invalid length. can`t be empty')]),
-    Param('message_id', PATH, str, required=True, rules=[MinLength(1, error='Invalid length. can`t be empty')]),
+    Param('username', PATH, str, required=True, rules=[
+          MinLength(1, error='Invalid length. can`t be empty')]),
+    Param('message_id', PATH, str, required=True, rules=[
+          MinLength(1, error='Invalid length. can`t be empty')]),
     Param('read', JSON, bool, required=True)
 )
 def message_read(username, message_id, read):
@@ -130,6 +137,7 @@ def message_read(username, message_id, read):
     message = MessageReceiver.query.with_parent(receiver)\
         .filter_by(message_id=message_id)\
         .first()
+
     if message is None:
         return {
             'statusCode': 404,
@@ -137,6 +145,7 @@ def message_read(username, message_id, read):
         }, 404
 
     message.read = read
+    
     db.session.add(message)
     db.session.commit()
 
@@ -158,8 +167,10 @@ def message_read(username, message_id, read):
 @app.route('/users/<username>/messages/<message_id>', methods=['DELETE'])
 @token_auth
 @validate_params(
-    Param('username', PATH, str, required=True, rules=[MinLength(1, error='Invalid length. can`t be empty')]),
-    Param('message_id', PATH, str, required=True, rules=[MinLength(1, error='Invalid length. can`t be empty')]),
+    Param('username', PATH, str, required=True, rules=[
+          MinLength(1, error='Invalid length. can`t be empty')]),
+    Param('message_id', PATH, str, required=True, rules=[
+          MinLength(1, error='Invalid length. can`t be empty')]),
 )
 def message_delete(username, message_id):
 
