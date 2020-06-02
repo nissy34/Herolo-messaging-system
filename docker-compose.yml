@@ -5,9 +5,12 @@ services:
         image: nissy34/herolo:latest
         networks: 
             - backend
+        secrets:
+            - source: sql_uri
+            - source: jwt
         environment: 
-            SQLALCHEMY_DATABASE_URI: mysql://herolo:example@database.cdb1of9cn3bv.us-east-1.rds.amazonaws.com/herolo
-            SECRET_KEY: "\\xbd\\x89lm\\xae{\\xbf\\x7f\\x93`\\x01\\xaf\\xd8\\xdf\\x81\\xfe\\t\\x80\\xc70\\xa7*\\xd1\\xff"
+            SQLALCHEMY_DATABASE_URI_FILE: /run/secrets/sql_uri
+            SECRET_KEY_FILE: /run/secrets/jwt
 
         deploy:
             mode: replicated
@@ -94,15 +97,20 @@ services:
 
                 ## Middlewares
                 - "traefik.http.routers.traefik-rtr.middlewares=middlewares-basic-auth@file,middlewares-rate-limit@file" 
+secrets:
+    jwt:
+        file: secrets/jwt_secret
+    traefik_basicAuth:
+        file: secrets/.htpasswd
+    sql_uri:
+        file: secrets/mysql
 
 configs:
     traefik_config:
         file: traefik/traefik.yaml
     traefik_rules:
         file: traefik/rules/rules.yaml
-secrets:
-    traefik_basicAuth:
-        file: traefik/shared/.htpasswd
+
 networks: 
     backend:
 volumes: 

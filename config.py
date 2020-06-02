@@ -1,9 +1,9 @@
-from os import getenv, path
+from util.load_env import load
 
-SQLALCHEMY_DATABASE_URI = getenv("SQLALCHEMY_DATABASE_URI")
+SQLALCHEMY_DATABASE_URI = load("SQLALCHEMY_DATABASE_URI")
 SQLALCHEMY_ECHO = False
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-SECRET_KEY = getenv('SECRET_KEY', 'my_secret')
+SECRET_KEY = load('SECRET_KEY', 'my_secret')
 
 BCRYPT_LOG_ROUNDS = 13

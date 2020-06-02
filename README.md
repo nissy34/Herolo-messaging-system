@@ -1,13 +1,27 @@
 # Herolo messaging system
 
-A simple messaging RestAPI written in python 
+A simple messaging RestAPI written in python  
+The service can be reached at https://herolo.duckdns.org
+# Components
+
+ - **Traefik** - a revearse proxy for accessing the REST API
+ - **App** - REST API service 
+	 - `Flask` as wsgi framework
+	 - `gunicorn` as wsgi server 
+ - **RDS** - A MySQL instance on AWS to presist the data  
 
 # Deployment
+The components are packeged as docker containers and Deployed on EC2 in AWS
 
+![Deployment](https://raw.githubusercontent.com/nissy34/Herolo-messaging-system/master/github/Deployment.png)
+# Getting started
 
+ 1. create a user on the system with the `/users` endpoint
+ 2. get your token with the `/users/<username>/token` endpoint
+ now that your user is set up and you have a token you can send and get messages
 
 # RestAPI
-
+**Base** https://herolo.duckdns.org
  - `/users`
 	 - description: Create a user in the system
 	 - method: `POST`
