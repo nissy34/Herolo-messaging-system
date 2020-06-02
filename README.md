@@ -14,6 +14,10 @@ The service can be reached at https://herolo.duckdns.org
 The components are packeged as docker containers and Deployed on EC2 in AWS
 
 ![Deployment](https://raw.githubusercontent.com/nissy34/Herolo-messaging-system/master/github/Deployment.png)
+
+# DB schema
+![schema](https://raw.githubusercontent.com/nissy34/Herolo-messaging-system/master/github/DBSchema.png)
+**Note** a user can send a message to **more then one receiver** hence the meny-to-many between users and messages 
 # Getting started
 
  1. create a user on the system with the `/users` endpoint
@@ -39,7 +43,8 @@ The components are packeged as docker containers and Deployed on EC2 in AWS
 	      }`
 	      
  - `/users/<username>/messages`
-     - description: Create a user in the system
+     - description: Create a user in the system 
+	     - **note** for now the endpoint only supports a single receiver
 	 - method: `POST`
 	 - header: `Authorization: Bearer <token>` - the Bearer token 
 	 -  body: `{
@@ -61,7 +66,7 @@ The components are packeged as docker containers and Deployed on EC2 in AWS
 			 - max number of messages to return
 		 - `page=<int>` - optional (default 1)
 			 - which page of result to return
-	 - 
+	 
 		 
  - `/users/<username>/messages/<message_id>`
      - header: `Authorization: Bearer <token>` - the Bearer token
