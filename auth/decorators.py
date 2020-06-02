@@ -34,7 +34,7 @@ def username_password_auth(handler):
                 'message': 'user dosn`t exist or wrong password'
             }, 403
 
-        return handler(request.view_args, **kwargs)
+        return handler(**{**request.view_args, **kwargs})
     return auth
 
 
@@ -42,7 +42,7 @@ def token_auth(handler):
 
     @functools.wraps(handler)
     def auth(*args, **kwargs):
-        username = kwargs["username"]
+        username = request.view_args["username"]
 
         token = None
         try:
@@ -70,5 +70,5 @@ def token_auth(handler):
                 'message': 'Invalid token.'
             }, 401
 
-        return handler(*args, **kwargs)
+        return handler(**{**request.view_args, **kwargs})
     return auth
