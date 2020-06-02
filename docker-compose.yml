@@ -55,7 +55,7 @@ services:
             - source: traefik_rules
               target: /rules/rules.yaml
         secrets:
-            - source: traefik_basicAuth
+            - source: traefik_basicAuth_v1
               target: /shared/.htpasswd
         volumes:
             - "traefik_data_cert:/letsEncrypt"
@@ -100,7 +100,7 @@ services:
 secrets:
     jwt:
         file: secrets/jwt_secret
-    traefik_basicAuth:
+    traefik_basicAuth_v1:
         file: secrets/.htpasswd
     sql_uri:
         file: secrets/mysql
