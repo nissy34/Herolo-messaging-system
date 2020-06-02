@@ -49,7 +49,7 @@ The components are packeged as docker containers and Deployed on EC2 in AWS
 	      }`
 	      
  - `/users/<username>/messages?unread="true"&per_page=20%page=1`
-     - description: Get messages for the given user
+     - description: Get **received** messages for the given user
 	 - method: `GET`
 	 - header: `Authorization: Bearer <token>` - the Bearer token 
 	 -  query: 
@@ -66,7 +66,7 @@ The components are packeged as docker containers and Deployed on EC2 in AWS
  - `/users/<username>/messages/<message_id>`
      - header: `Authorization: Bearer <token>` - the Bearer token
 	 - method: `PATCH`
-		 - description: Set message as read or unread
+		 - description: Set a **received** message as read or unread
 		 - body `{ read:<"true"|"false">}`
 	  - method: `Delete`
 		 - description: Delete the message. if the user is the sender it deletes the message from all receivers if the user is the receiver it only deletees the message from the receiver feed

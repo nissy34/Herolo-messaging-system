@@ -62,7 +62,7 @@ def token_auth(handler):
         except jwt.ExpiredSignatureError:
             return {
                 'statusCode': 401,
-                'message': 'Token expired'
+                'message': 'Token expired.'
             }, 401
         except jwt.InvalidTokenError:
             return {

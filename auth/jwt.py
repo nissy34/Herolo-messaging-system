@@ -9,7 +9,7 @@ def encode_auth_token(username):
     :return: string
     """
     payload = {
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, hours=1),
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(weeks=1),
         'iat': datetime.datetime.utcnow(),
         'sub': username
     }

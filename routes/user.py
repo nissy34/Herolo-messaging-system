@@ -19,11 +19,10 @@ from validators.validator_rules import (
 )
 
 
-
 @app.route('/users', methods=["POST"])
 @validate_params(
     Param('username', JSON, str, required=True,
-          rules=[MaxLength(80), MinLength(5)]),
+          rules=[MaxLength(80), MinLength(5), Pattern(r"^[a-zA-Z\d]+$", error="Invalid username. can`t have white spaces and can only contain letters and numbers")]),
     Param('email', JSON, str, required=True, rules=[EmailRule()]),
     Param('password', JSON, str, required=True, rules=[MinLength(6, error='Invalid length. Min length = 1'),
                                                        Pattern(r'^[a-zA-Z\d@$.!-_%*#?&]*$',
@@ -49,7 +48,7 @@ def create_user(username, email, password):
             'message': 'A user with the email `{}`  exists'.format(email)
         }
 
-    # hash the password 
+    # hash the password
     password = bcrypt.generate_password_hash(
         password, app.config.get('BCRYPT_LOG_ROUNDS')
     ).decode()
@@ -68,8 +67,10 @@ def create_user(username, email, password):
 
 @app.route('/users/<username>/token', methods=["POST"])
 @validate_params(
-    Param('username', PATH, str, required=True, rules=[MinLength(1, error='Invalid length. can`t be empty')]),
-    Param('password', JSON, str, required=True, rules=[MinLength(1, error='Invalid length. can`t be empty')])
+    Param('username', PATH, str, required=True, rules=[
+          MinLength(1, error='Invalid length. can`t be empty')]),
+    Param('password', JSON, str, required=True, rules=[
+          MinLength(1, error='Invalid length. can`t be empty')])
 )
 @username_password_auth
 def get_token(username):
