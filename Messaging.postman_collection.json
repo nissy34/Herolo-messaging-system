@@ -1,0 +1,282 @@
+{
+	"info": {
+		"_postman_id": "95ddf83c-a283-4547-a720-cff4e7f738b9",
+		"name": "Messaging",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "messages",
+			"item": [
+				{
+					"name": "send a message",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1OTE3MjQzNjQsImlhdCI6MTU5MTExOTU2NCwic3ViIjoidGVzdHVzZXIifQ.2R_Z9Lsw5k-nM077SNXN5Ss40jJTR4J7uJm6YTReomA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"receiver\":\"lasttestuser\",\n\t\"subject\":\"test111\",\n\t\"message\":\"test2222\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://herolo.duckdns.org/users/testuser/message",
+							"protocol": "https",
+							"host": [
+								"herolo",
+								"duckdns",
+								"org"
+							],
+							"path": [
+								"users",
+								"testuser",
+								"message"
+							]
+						},
+						"description": "/users/&lt;username&gt;/message\r\n\r\nheaders\r\n- <b>Authorization</b>\r\n    the Bearer for the user"
+					},
+					"response": []
+				},
+				{
+					"name": "get received messages per user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1OTE3MjQzNjQsImlhdCI6MTU5MTExOTU2NCwic3ViIjoidGVzdHVzZXIifQ.2R_Z9Lsw5k-nM077SNXN5Ss40jJTR4J7uJm6YTReomA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://herolo.duckdns.org/users/testuser/messages?unread=true&per_page=1&page=1",
+							"protocol": "https",
+							"host": [
+								"herolo",
+								"duckdns",
+								"org"
+							],
+							"path": [
+								"users",
+								"testuser",
+								"messages"
+							],
+							"query": [
+								{
+									"key": "unread",
+									"value": "true"
+								},
+								{
+									"key": "per_page",
+									"value": "1"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						},
+						"description": "params \r\n- <b>unread</b>  \r\n    if true - return only unread messages\r\n    if flase -  return only messages that have been read\r\n    if undefined return all messages\r\n\r\nheaders\r\n- <b>Authorization</b>\r\n    the Bearer for the user"
+					},
+					"response": []
+				},
+				{
+					"name": "read a message",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1OTE3MjQzNjQsImlhdCI6MTU5MTExOTU2NCwic3ViIjoidGVzdHVzZXIifQ.2R_Z9Lsw5k-nM077SNXN5Ss40jJTR4J7uJm6YTReomA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"read\":true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://herolo.duckdns.org/users/testuser/messages/3",
+							"protocol": "https",
+							"host": [
+								"herolo",
+								"duckdns",
+								"org"
+							],
+							"path": [
+								"users",
+								"testuser",
+								"messages",
+								"3"
+							]
+						},
+						"description": "body\r\n- <b>read</b>\r\n    read = true -> mark message as read\r\n    read = false -> mark a message as unread\r\n    \r\nheaders\r\n- <b>Authorization</b>\r\n    the Bearer for the user"
+					},
+					"response": []
+				},
+				{
+					"name": "delete a message",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1OTE3MjQzNjQsImlhdCI6MTU5MTExOTU2NCwic3ViIjoidGVzdHVzZXIifQ.2R_Z9Lsw5k-nM077SNXN5Ss40jJTR4J7uJm6YTReomA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://herolo.duckdns.org/users/testuser/messages/3",
+							"protocol": "https",
+							"host": [
+								"herolo",
+								"duckdns",
+								"org"
+							],
+							"path": [
+								"users",
+								"testuser",
+								"messages",
+								"3"
+							]
+						},
+						"description": "headers\r\n- <b>Authorization</b>\r\n    the Bearer for the user"
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1OTE3MjQzNjQsImlhdCI6MTU5MTExOTU2NCwic3ViIjoidGVzdHVzZXIifQ.2R_Z9Lsw5k-nM077SNXN5Ss40jJTR4J7uJm6YTReomA",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "bf05f726-7cf7-4287-9015-ffc909fbf588",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "6b774aec-808b-4cdb-8f0b-aa8afc16a0e4",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "create a token for the user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"password\":\"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://herolo.duckdns.org/users/testuser/token",
+							"protocol": "https",
+							"host": [
+								"herolo",
+								"duckdns",
+								"org"
+							],
+							"path": [
+								"users",
+								"testuser",
+								"token"
+							]
+						},
+						"description": "/user/&lt;username&gt;/token\r\n\r\nbody\r\n- <b>password</b>\r\n     the user passwowrd"
+					},
+					"response": []
+				},
+				{
+					"name": "register a user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\":\"testuser\",\n\t\"email\":\"ee@gmail.com\",\n\t\"password\":\"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://herolo.duckdns.org/users",
+							"protocol": "https",
+							"host": [
+								"herolo",
+								"duckdns",
+								"org"
+							],
+							"path": [
+								"users"
+							]
+						},
+						"description": "/user\r\n\r\nbody\r\n- \t<b>username</b>\r\n-\t<b>email</b>\r\n-\t<b>password</b>"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
