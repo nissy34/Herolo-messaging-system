@@ -32,6 +32,8 @@ stack details:
  now that your user is set up and you have a token you can send and get messages
 
 # RestAPI
+[Postman docs](https://documenter.getpostman.com/view/6128785/SztG3RNu)
+
 **Base** https://herolo.duckdns.org
  - `/users`
 	 - description: Create a user in the system
