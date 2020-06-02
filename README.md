@@ -17,7 +17,7 @@ The components are packeged as docker containers and Deployed on EC2 in AWS
 
 # DB schema
 ![schema](https://raw.githubusercontent.com/nissy34/Herolo-messaging-system/master/github/DBSchema.png)
-**Note** a user can send a message to **more then one receiver** hence the meny-to-many between users and messages 
+<br/>**Note** a user can send a message to **more then one receiver** hence the meny-to-many between users and messages 
 # Getting started
 
  1. create a user on the system with the `/users` endpoint
