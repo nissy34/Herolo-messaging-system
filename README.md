@@ -35,7 +35,7 @@ The components are packeged as docker containers and Deployed on EC2 in AWS
   	 - description: create a Bearer token for the user
 	 - method: `POST`
 	 -  body: `{
-			 password:<>
+			 password:<string>
 	      }`
 	      
  - `/users/<username>/messages`
@@ -43,19 +43,25 @@ The components are packeged as docker containers and Deployed on EC2 in AWS
 	 - method: `POST`
 	 - header: `Authorization: Bearer <token>` - the Bearer token 
 	 -  body: `{
-			 receiver:<"the receiver username">,
-			 subject:<"the subject">,
-			 message:<"the message">
+			  receiver:<string - the receiver username>, 
+			 subject:<string>,
+			 message:<string>
 	      }`
 	      
- - `/users/<username>/messages?unread=true`
+ - `/users/<username>/messages?unread="true"&per_page=20%page=1`
      - description: Get messages for the given user
 	 - method: `GET`
 	 - header: `Authorization: Bearer <token>` - the Bearer token 
-	 -  query: `unread` - optional
-		 - `unread="true"` return only unread messages
-		 - `unread="false"` return only messages that have been read
-		 - if not present return all messages
+	 -  query: 
+		 - `unread=<"true"|"false">` - optional
+			 - `unread="true"` return only unread messages
+			 - `unread="false"` return only messages that have been read
+			 - if not present return all messages
+		 - `per_page=<int>` - optional (default 20) 
+			 - max number of messages to return
+		 - `page=<int>` - optional (default 1)
+			 - which page of result to return
+	 - 
 		 
  - `/users/<username>/messages/<message_id>`
      - header: `Authorization: Bearer <token>` - the Bearer token
@@ -64,5 +70,3 @@ The components are packeged as docker containers and Deployed on EC2 in AWS
 		 - body `{ read:<"true"|"false">}`
 	  - method: `Delete`
 		 - description: Delete the message. if the user is the sender it deletes the message from all receivers if the user is the receiver it only deletees the message from the receiver feed
-
-	
