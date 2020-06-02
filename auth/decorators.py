@@ -12,7 +12,8 @@ def username_password_auth(handler):
 
     @functools.wraps(handler)
     def auth(*args, **kwargs):
-        username = kwargs["username"]
+
+        username = request.view_args["username"]
 
         content = request.get_json()
         password = content["password"]
@@ -33,7 +34,7 @@ def username_password_auth(handler):
                 'message': 'user dosn`t exist or wrong password'
             }, 403
 
-        return handler(*args, **kwargs)
+        return handler(request.view_args, **kwargs)
     return auth
 
 

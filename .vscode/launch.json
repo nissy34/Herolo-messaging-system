@@ -3,8 +3,7 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [
-            {
+    "configurations": [{
             "name": "Python: Flask",
             "type": "python",
             "request": "launch",
@@ -13,6 +12,7 @@
                 "FLASK_APP": "app.py",
                 "FLASK_ENV": "development",
                 "FLASK_DEBUG": "1",
+                "SQLALCHEMY_DATABASE_URI": "mysql://herolo:example@database.cdb1of9cn3bv.us-east-1.rds.amazonaws.com/herolo",
                 "SECRET_KEY": "\\xbd\\x89lm\\xae{\\xbf\\x7f\\x93`\\x01\\xaf\\xd8\\xdf\\x81\\xfe\\t\\x80\\xc70\\xa7*\\xd1\\xff"
             },
             "args": [
@@ -28,8 +28,8 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "env":{
-                "A_FILE":"util/a"
+            "env": {
+                "A_FILE": "util/a"
             }
         }
 

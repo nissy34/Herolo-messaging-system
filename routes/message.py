@@ -1,3 +1,4 @@
+import logging
 from flask import request
 from flask import current_app as app
 from flask_request_validator import (
@@ -14,12 +15,14 @@ from validators.validator_rules import (
     MaxLength
 )
 
+# TODO use a service instead of interacting straight with the models  
 from DB.models.message import Message, db
 from DB.models.user import User
 from DB.models.messageReceiver import MessageReceiver
 
 from auth.decorators import token_auth
 
+logger = logging.getLogger('rest')
 
 @app.route('/users/<username>/message', methods=['POST'])
 @token_auth
@@ -34,7 +37,7 @@ from auth.decorators import token_auth
                                                       MinLength(1, error='Invalid length. Min length = 1')])
 )
 def message_create(username, receiver, subject, message):
-    content = request.get_json()
+    """  """
     sender = User.query.filter_by(username=username).first()
 
     if sender is None:
@@ -45,22 +48,26 @@ def message_create(username, receiver, subject, message):
 
     receiver = User.query.filter_by(username=content["receiver"]).first()
 
+    # we only allow to send to existing receivers 
     if receiver is None:
         return {
             'statusCode': 400,
             'message': 'Receiver dosn\'t exist'
         }, 400
 
-    subject = content["subject"]
-    message = content["message"]
-
+    # create the message
     message = Message(subject=subject, message=message)
 
+    # attach the message to the sender
     sender.sentMessagas.append(message)
+
+    # attach the message to the sender
     receiver.receivedMessages.append(MessageReceiver(message=message))
 
+    # save changes to db
     db.session.add(message)
     db.session.commit()
+
     return {
         'statusCode': 201,
         'message': 'OK',

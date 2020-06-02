@@ -1,10 +1,11 @@
+import logging
 from flask import request, render_template, make_response
 from flask import current_app as app
 from flask_request_validator.exceptions import InvalidRequest
-import logging
-logger = logging.getLogger("app")
 
 from werkzeug.exceptions import InternalServerError
+
+logger = logging.getLogger("rest")
 
 
 @app.errorhandler(404)
@@ -16,7 +17,7 @@ def page_not_found(error):
 
 
 @app.errorhandler(405)
-def page_not_found(error):
+def method_not_found(error):
     return {
         'statusCode': 405,
         'message': 'The method is not allowed for the requested URL'

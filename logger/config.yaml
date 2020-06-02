@@ -17,7 +17,8 @@ handlers:
         maxBytes: 1000000
         backupCount: 3
 loggers:
-  app:
+  rest:
     level: DEBUG
     handlers: [console,file]
     propagate: yes
+

@@ -1,28 +1,26 @@
-from DB.models.messageReceiver import MessageReceiver
-from DB.models.user import User
-from DB.models.message import Message, db
+from flask_request_validator import (
+    PATH,
+    JSON,
+    Param,
+    validate_params
+)
+from flask import current_app as app
+
+from DB.models.user import User, db
+
 from auth.jwt import encode_auth_token
-from auth.decorators import username_password_auth, bcrypt, token_auth
+from auth.decorators import username_password_auth, bcrypt
+
 from validators.email_validater import EmailRule
 from validators.validator_rules import (
     Pattern,
     MinLength,
     MaxLength
 )
-from flask_request_validator import (
-    PATH,
-    FORM,
-    JSON,
-    Param,
-    validate_params
-)
-from flask import current_app as app
-from flask import request
-import logging
-logger = logging.getLogger()
 
 
-@app.route('/user', methods=["POST"])
+
+@app.route('/users', methods=["POST"])
 @validate_params(
     Param('username', JSON, str, required=True,
           rules=[MaxLength(80), MinLength(5)]),
@@ -51,6 +49,7 @@ def create_user(username, email, password):
             'message': 'A user with the email `{}`  exists'.format(email)
         }
 
+    # hash the password 
     password = bcrypt.generate_password_hash(
         password, app.config.get('BCRYPT_LOG_ROUNDS')
     ).decode()
@@ -67,7 +66,11 @@ def create_user(username, email, password):
     }, 201
 
 
-@app.route('/user/<username>/token', methods=["POST"])
+@app.route('/users/<username>/token', methods=["POST"])
+@validate_params(
+    Param('username', PATH, str, required=True, rules=[MinLength(1, error='Invalid length. can`t be empty')]),
+    Param('password', JSON, str, required=True, rules=[MinLength(1, error='Invalid length. can`t be empty')])
+)
 @username_password_auth
 def get_token(username):
     token = encode_auth_token(username)
