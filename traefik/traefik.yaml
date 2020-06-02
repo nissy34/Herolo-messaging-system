@@ -3,7 +3,7 @@ global:
   sendAnonymousUsage: true
 
 log:
-  level: WARN
+  level: DEBUG
 accessLog:
   filePath: /logs/traefik.log
   bufferingSize: 100

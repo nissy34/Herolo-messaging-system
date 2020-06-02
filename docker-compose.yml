@@ -56,7 +56,7 @@ services:
               target: /shared/.htpasswd
         volumes:
             - "traefik_data_cert:/letsEncrypt"
-            - traefik_data_logs:/logs
+            - traefik/logs:/logs
             - "/var/run/docker.sock:/var/run/docker.sock:ro"
         deploy:
             mode: replicated
@@ -107,4 +107,3 @@ networks:
     backend:
 volumes: 
     traefik_data_cert:
-    traefik_data_logs:
