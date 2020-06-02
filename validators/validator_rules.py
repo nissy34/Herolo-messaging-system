@@ -1,3 +1,6 @@
+# validator rules based on flask-request-validator (https://github.com/d-ganchar/flask_request_validator)
+# added an option to define a custom error message
+
 from flask_request_validator import AbstractRule
 import re
 

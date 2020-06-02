@@ -5,9 +5,11 @@ from flask_bcrypt import Bcrypt
 
 from DB.models.user import User
 from .jwt import decode_auth_token, jwt
+
+# init bcrypt - library for hashing and addind salt yummmy
 bcrypt = Bcrypt(app)
 
-
+# decerator for auth with username and password
 def username_password_auth(handler):
 
     @functools.wraps(handler)
@@ -38,6 +40,7 @@ def username_password_auth(handler):
     return auth
 
 
+# decerator for auth with jwt token
 def token_auth(handler):
 
     @functools.wraps(handler)
@@ -67,7 +70,7 @@ def token_auth(handler):
         except jwt.InvalidTokenError:
             return {
                 'statusCode': 401,
-                'message': 'Invalid token.'
+                'message': 'Invalid token for user {}.'.format(username)
             }, 401
 
         return handler(**{**request.view_args, **kwargs})
