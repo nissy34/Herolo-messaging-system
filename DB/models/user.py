@@ -11,7 +11,7 @@ class User(db.Model):
 
     receivedMessages = db.relationship("MessageReceiver", back_populates="receiver", cascade="all")
     sentMessagas = db.relationship('Message', back_populates="sender", cascade="all")
-
-    
+   
+   
     def __repr__(self):
         return '<User %r>' % self.username

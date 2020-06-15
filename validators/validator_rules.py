@@ -8,7 +8,7 @@ import re
 class AbstractRuleWithCustomError(AbstractRule):
     def __init__(self, error=None):
         """
-        :param str pattern:
+        :param str custom error message:
         """
         self.error_message = error
 

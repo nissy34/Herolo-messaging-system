@@ -8,7 +8,3 @@ def connect_db_to_app(app):
     return app
 
 
-def get_db():
-    return db
-
-

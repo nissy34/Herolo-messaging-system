@@ -15,3 +15,6 @@ class MessageReceiver(db.Model):
                      default=False)
     message = db.relationship("Message", back_populates="receiver")
     receiver = db.relationship("User", back_populates="receivedMessages")
+
+    def __repr__(self):
+            return '<MessageReceiver %r %r>' % self.message_id, self.receiver_id

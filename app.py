@@ -5,7 +5,7 @@ from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_ECHO, SQLALCHEMY_TRACK_MO
 from DB.database import connect_db_to_app
 from DB.bootstrap import bootstrap
 
-
+# app factory pattern
 def create_app():
     app = Flask(__name__)
 
@@ -34,7 +34,6 @@ def create_app():
 
 
 app = create_app()
-# init routes
 
-# if __name__ == "__main__":
-#     app.run()
+if __name__ == "__main__":
+    app.run()
